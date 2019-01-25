@@ -1,0 +1,12 @@
+{% extends "complaint/complaint_base.html" %}
+
+{% block content %}
+
+    
+    <form action="{% url 'complaints:get_const_num' %}" method="POST">
+        {% csrf_token %}
+        {{form.as_p}}
+        <input type="submit" value="View">
+    </form>
+
+{% endblock %}

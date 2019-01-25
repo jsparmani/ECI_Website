@@ -11,15 +11,12 @@ class Complaint(models.Model):
     user = models.ForeignKey(
         User, related_name='complaints', on_delete=models.CASCADE)
     COMPLAINT_CHOICES = [
-        ('Booth Level Complaints',
-        'Booth Level Complaints'),
         ('Booth Capturing', 'Booth Capturing'),
         ('Bogus Voting', 'Bogus Voting'),
         ('Liquor Distribution', 'Liquor Distribution'),
         ('Money Distribution', 'Money Distribution'),
         ('Over Campaigning', 'Over Campaigning'),
-        ('Obstruction to voters',
-        'Obstruction to voters'),
+        ('Obstruction to voters','Obstruction to voters'),
         ('No armed forces', 'No armed forces'),
         ('EVM Malfunctioning', 'EVM Malfunctioning'),
     ]
@@ -43,3 +40,5 @@ class Complaint(models.Model):
     class Meta():
         ordering=['created_at']
         unique_together = ["user", "choice"]
+
+    
