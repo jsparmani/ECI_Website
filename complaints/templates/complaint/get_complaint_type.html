@@ -1,0 +1,22 @@
+{% extends "complaint/complaint_base.html" %}
+
+{% block content %}
+
+    
+    <form action="{% url 'complaints:get_type' %}" method="POST">
+        {% csrf_token %}
+        {{form.as_p}}
+        <input type="submit" value="View">
+    </form>
+
+    <!-- <select name="type">
+        <option value="Booth Capturing">Booth Capturing</option>
+        <option value="Bogus Voting">Bogus Voting</option>
+        <option value="Obstruction to Voters">Obstruction to Voters</option>
+        <option value="Money Distribution">Money Distribution</option>
+        <option value="Liquor Distribution">Liquor Distribution</option>
+        <option value="No Armed Forces">No Armed Forces</option>
+        <option value="EVM Malfunction">EVM Malfunction</option>
+    </select> -->
+
+{% endblock %}

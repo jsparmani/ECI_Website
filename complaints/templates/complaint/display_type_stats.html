@@ -1,0 +1,14 @@
+{% extends "complaint/complaint_base.html" %}
+
+{% block content %}
+
+<ul>
+    {% for key,value in dict.items %}
+    <li>
+        <p>{{key}}:{{value}}</p>
+    </li>
+    {% endfor %}
+</ul>
+
+
+{% endblock %}

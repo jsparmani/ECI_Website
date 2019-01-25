@@ -4,6 +4,7 @@ from django.views import generic
 from django.urls import reverse_lazy
 from .import models
 from .import forms
+from django.utils.text import slugify
 from django.contrib.auth import get_user_model
 User = get_user_model()
 # Create your views here.
@@ -60,6 +61,18 @@ def get_const_num(request):
         form = forms.get_number()
     return render(request, 'complaint/get_constituency.html', {'form':form})
 
+def get_type(request):
+    if request.method == 'POST':
+        form = forms.get_type_form(request.POST)
+        if form.is_valid():
+            type = form.cleaned_data['type']
+            type = slugify(type)
+            return redirect('complaints:display_type_stats', type=type)
+        # const = request.POST['const']
+    else:
+        form = forms.get_type_form()
+    return render(request, 'complaint/get_complaint_type.html', {'form':form})
+
 
 def display_const_stats(request, const):
     booth_capturing_num = models.Complaint.objects.all().filter(
@@ -88,3 +101,19 @@ def display_const_stats(request, const):
             'armed_forces_num': armed_forces_num,
             'evm_malfunctioning_num': evm_malfunctioning_num}
     return render(request, 'complaint/display_const_stats.html', context=dict)
+
+def display_type_stats(request, type):
+    dict = {}
+
+    type = type.replace("-", " ")
+    
+    for i in range(1,10):
+        const = models.Complaint.objects.all().filter(
+        choice__iexact=type, user__voter_details__cons_no__iexact=i).count()
+        dict.update({i:const})
+    return render(request, 'complaint/display_type_stats.html', {'dict':dict})
+
+
+    
+
+    

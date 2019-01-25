@@ -8,8 +8,23 @@ class ComplaintForm(forms.ModelForm):
         model = models.Complaint
         exclude = ['user', 'created_at']
 
+
 class get_number(forms.Form):
 
-    const=forms.IntegerField()
+    const = forms.IntegerField()
 
 
+class get_type_form(forms.Form):
+
+    COMPLAINT_CHOICES = [
+        ('Booth Capturing', 'Booth Capturing'),
+        ('Bogus Voting', 'Bogus Voting'),
+        ('Liquor Distribution', 'Liquor Distribution'),
+        ('Money Distribution', 'Money Distribution'),
+        ('Over Campaigning', 'Over Campaigning'),
+        ('Obstruction to voters','Obstruction to voters'),
+        ('No armed forces', 'No armed forces'),
+        ('EVM Malfunctioning', 'EVM Malfunctioning'),
+    ]
+
+    type = forms.ChoiceField(choices=COMPLAINT_CHOICES)
