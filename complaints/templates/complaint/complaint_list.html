@@ -7,6 +7,9 @@
             {{com.choice}} 
             {{com.user.voter_details.cons_no}} 
             {{com.user.voter_details.booth_no}}
+            {% if com.viewed_complaint == 0 %}
+            <h3>Unseen</h3>
+            {% endif %}
             <a href="{% url 'complaints:update_view' pk=com.pk %}">View Details</a>
         </li>
         {% endfor %}
