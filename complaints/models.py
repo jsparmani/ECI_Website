@@ -16,7 +16,7 @@ class Complaint(models.Model):
         ('Liquor Distribution', 'Liquor Distribution'),
         ('Money Distribution', 'Money Distribution'),
         ('Over Campaigning', 'Over Campaigning'),
-        ('Obstruction to voters','Obstruction to voters'),
+        ('Obstruction to voters', 'Obstruction to voters'),
         ('No armed forces', 'No armed forces'),
         ('EVM Malfunctioning', 'EVM Malfunctioning'),
     ]
@@ -26,10 +26,18 @@ class Complaint(models.Model):
     description = models.TextField(blank=True)
     file_upload = models.FileField(
         upload_to='files', blank=True)
+    file_upload1 = models.FileField(
+        upload_to='files', blank=True)
+    file_upload2 = models.FileField(
+        upload_to='files', blank=True)
+    file_upload3 = models.FileField(
+        upload_to='files', blank=True)
+    file_upload4 = models.FileField(
+        upload_to='files', blank=True)
+    file_upload5 = models.FileField(
+        upload_to='files', blank=True)
 
-    
-
-    created_at=models.DateTimeField(auto_now = True)
+    created_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.choice
@@ -38,7 +46,5 @@ class Complaint(models.Model):
         return reverse('home')
 
     class Meta():
-        ordering=['created_at']
+        ordering = ['created_at']
         unique_together = ["user", "choice"]
-
-    

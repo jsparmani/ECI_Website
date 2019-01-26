@@ -21,6 +21,8 @@ class CreateComplaint(LoginRequiredMixin, generic.FormView):
         self.object.save()
         return super().form_valid(form)
 
+# All Data Display for the country
+
 
 def allConstStatus(request):
     booth_capturing_num = models.Complaint.objects.all().filter(
@@ -49,6 +51,8 @@ def allConstStatus(request):
             'evm_malfunctioning_num': evm_malfunctioning_num}
     return render(request, 'complaint/display_all_stats.html', context=dict)
 
+# Get The Constitunecy number to display stats
+
 
 def get_const_num(request):
     if request.method == 'POST':
@@ -59,7 +63,10 @@ def get_const_num(request):
         # const = request.POST['const']
     else:
         form = forms.get_number()
-    return render(request, 'complaint/get_constituency.html', {'form':form})
+    return render(request, 'complaint/get_constituency.html', {'form': form})
+
+# Get The type of complaint to display stats
+
 
 def get_type(request):
     if request.method == 'POST':
@@ -71,8 +78,23 @@ def get_type(request):
         # const = request.POST['const']
     else:
         form = forms.get_type_form()
-    return render(request, 'complaint/get_complaint_type.html', {'form':form})
+    return render(request, 'complaint/get_complaint_type.html', {'form': form})
 
+def get_type_num(request):
+    if request.method == 'POST':
+        form = forms.get_type_num_form(request.POST)
+        if form.is_valid():
+            type = form.cleaned_data['type']
+            type = slugify(type)
+            const = form.cleaned_data['const']
+            return redirect('complaints:complaint_list', type=type, const=const)
+        # const = request.POST['const']
+    else:
+        form = forms.get_type_num_form()
+    return render(request, 'complaint/get_complaint_type_num.html', {'form': form})
+
+
+# Display stats of a particular constituency
 
 def display_const_stats(request, const):
     booth_capturing_num = models.Complaint.objects.all().filter(
@@ -91,7 +113,7 @@ def display_const_stats(request, const):
         choice__iexact="No armed forces", user__voter_details__cons_no__iexact=const).count()
     evm_malfunctioning_num = models.Complaint.objects.all().filter(
         choice__iexact="EVM Malfunctioning", user__voter_details__cons_no__iexact=const).count()
-    dict = {'const': const, 
+    dict = {'const': const,
             'booth_capturing_num': booth_capturing_num,
             'bogus_voting_num': bogus_voting_num,
             'liquor_distribution_num': liquor_distribution_num,
@@ -102,18 +124,34 @@ def display_const_stats(request, const):
             'evm_malfunctioning_num': evm_malfunctioning_num}
     return render(request, 'complaint/display_const_stats.html', context=dict)
 
+#  Display stats of a particular type
+
+
 def display_type_stats(request, type):
     dict = {}
 
     type = type.replace("-", " ")
-    
-    for i in range(1,10):
+
+    for i in range(1, 10):
         const = models.Complaint.objects.all().filter(
-        choice__iexact=type, user__voter_details__cons_no__iexact=i).count()
-        dict.update({i:const})
-    return render(request, 'complaint/display_type_stats.html', {'dict':dict})
+            choice__iexact=type, user__voter_details__cons_no__iexact=i).count()
+        dict.update({i: const})
+    return render(request, 'complaint/display_type_stats.html', {'dict': dict})
+
+# Display stats for govt
+
+class ComplaintList(generic.ListView, LoginRequiredMixin):
+    model = models.Complaint
+    template_name = 'complaint/complaint_list.html'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        type_new = self.kwargs.get("type").replace("-", " ")
+
+        return queryset.filter(choice__iexact=type_new, user__voter_details__cons_no__iexact=self.kwargs.get("const"))
+
+class ComplaintDetail(generic.DetailView, LoginRequiredMixin):
+    model = models.Complaint
+    template_name = 'complaint/complaint_detail.html'
 
 
-    
-
-    

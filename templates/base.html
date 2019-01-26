@@ -13,6 +13,7 @@
     <a href="{% url 'complaints:display_all' %}">Display</a>
     <a href="{% url 'complaints:get_const_num' %}">View Const Specific</a>
     <a href="{% url 'complaints:get_type' %}">View Type Specific</a>
+    <a href="{% url 'complaints:get_type_num' %}">View Special List</a>
     {% if user.is_authenticated %}
         <a href="{% url 'complaints:create' %}">Create New Complaint</a>
         <a href="{% url 'accounts:logout' %}">Logout</a>

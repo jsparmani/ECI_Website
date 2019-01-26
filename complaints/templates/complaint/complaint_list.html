@@ -1,0 +1,14 @@
+{% extends "complaint/complaint_base.html" %}
+
+{% block complaint_content %}
+    <ul>
+        {% for com in complaint_list %}
+        <li>
+            {{com.choice}} 
+            {{com.user.voter_details.cons_no}} 
+            {{com.user.voter_details.booth_no}}
+            <a href="{% url 'complaints:single' pk=com.pk %}">View Details</a>
+        </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
