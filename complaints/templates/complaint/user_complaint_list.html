@@ -7,7 +7,7 @@
             {{com.choice}} 
             {{com.user.voter_details.cons_no}} 
             {{com.user.voter_details.booth_no}}
-            <a href="{% url 'complaints:update_view' pk=com.pk %}">View Details</a>
+            <a href="{% url 'complaints:single' pk=com.pk %}">View Details</a>
         </li>
         {% endfor %}
     </ul>

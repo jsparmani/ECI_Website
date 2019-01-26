@@ -6,6 +6,7 @@ from .import models
 from .import forms
 from django.utils.text import slugify
 from django.contrib.auth import get_user_model
+from django.http import Http404
 User = get_user_model()
 # Create your views here.
 
@@ -80,6 +81,7 @@ def get_type(request):
         form = forms.get_type_form()
     return render(request, 'complaint/get_complaint_type.html', {'form': form})
 
+
 def get_type_num(request):
     if request.method == 'POST':
         form = forms.get_type_num_form(request.POST)
@@ -140,7 +142,17 @@ def display_type_stats(request, type):
         dict.update({i: const})
     return render(request, 'complaint/display_type_stats.html', {'dict': dict})
 
+# Updating viewed boolean value
+
+
+def update_view(request, pk):
+    present_complaint = models.Complaint.objects.get(pk=pk)
+    present_complaint.viewed_complaint = True
+    present_complaint.save()
+    return redirect('complaints:single', pk=pk)
+
 # Display stats for govt
+
 
 class ComplaintList(generic.ListView, LoginRequiredMixin):
     model = models.Complaint
@@ -150,21 +162,39 @@ class ComplaintList(generic.ListView, LoginRequiredMixin):
         queryset = super().get_queryset()
         type_new = self.kwargs.get("type").replace("-", " ")
         select_all = self.kwargs.get("select_all")
-        if type_new=='all' and select_all==0:
+        if type_new == 'all' and select_all == 0:
             return queryset.filter(user__voter_details__cons_no__iexact=self.kwargs.get("const"))
 
-        if type_new=='all' and select_all==1:
+        if type_new == 'all' and select_all == 1:
             return queryset
-        
-        if type_new!='all' and select_all==1:
+
+        if type_new != 'all' and select_all == 1:
             return queryset.filter(choice__iexact=type_new)
-        
-        
+
         return queryset.filter(choice__iexact=type_new, user__voter_details__cons_no__iexact=self.kwargs.get("const"))
-        
+
+# Display stat for particular complaint
+
 
 class ComplaintDetail(generic.DetailView, LoginRequiredMixin):
     model = models.Complaint
     template_name = 'complaint/complaint_detail.html'
 
 
+class UserComplaints(LoginRequiredMixin, generic.ListView):
+    model = models.Complaint
+    template_name = "complaint/user_complaint_list.html"
+
+    def get_queryset(self):
+        try:
+            self.complaint_user = User.objects.prefetch_related(
+                "complaints").get(username__iexact=self.kwargs.get("username"))
+        except User.DoesNotExist:
+            raise Http404
+        else:
+            return self.complaint_user.complaints.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["complaint_user"] = self.complaint_user
+        return context

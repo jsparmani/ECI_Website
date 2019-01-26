@@ -1,29 +1,36 @@
 {% extends "complaint/complaint_base.html" %}
 
 {% block complaint_content %}
-    <h1>{{ complaint.choice }}</h1>
-    <h1>{{ complaint.user.voter_details.cons_no }}</h1>
-    <h1>{{ complaint.user.voter_details.booth_no }}</h1>
-    <h1>{{ complaint.user.username }}</h1>
-    <p>{{ complaint.created_at }}</p>
-    <p>{{ complaint.description }}</p>
-    {% if complaint.file_upload %}
-        <img src="{{ complaint.file_upload.url }}" alt="Uploaded File">
-    {% endif %}
-    {% if complaint.file_upload1 %}
-        <img src="{{ complaint.file_upload1.url }}" alt="Uploaded File">
-    {% endif %}
-    {% if complaint.file_upload2 %}
-        <img src="{{ complaint.file_upload2.url }}" alt="Uploaded File">
-    {% endif %}
-    {% if complaint.file_upload3 %}
-        <img src="{{ complaint.file_upload3.url }}" alt="Uploaded File">
-    {% endif %}
-    {% if complaint.file_upload4 %}
-        <img src="{{ complaint.file_upload4.url }}" alt="Uploaded File">
-    {% endif %}
-    {% if complaint.file_upload5 %}
-        <img src="{{ complaint.file_upload5.url }}" alt="Uploaded File">
-    {% endif %}
+<h1>{{ complaint.choice }}</h1>
+<h1>{{ complaint.user.voter_details.cons_no }}</h1>
+<h1>{{ complaint.user.voter_details.booth_no }}</h1>
+
+{% if complaint.viewed_complaint == 1 %}
+<h2>Status: Seen</h2>
+{% else %}
+<h2>Status: Unseen</h2>
+{% endif %}
+
+<h1>{{ complaint.user.username }}</h1>
+<p>{{ complaint.created_at }}</p>
+<p>{{ complaint.description }}</p>
+{% if complaint.file_upload %}
+<img src="{{ complaint.file_upload.url }}" alt="Uploaded File">
+{% endif %}
+{% if complaint.file_upload1 %}
+<img src="{{ complaint.file_upload1.url }}" alt="Uploaded File">
+{% endif %}
+{% if complaint.file_upload2 %}
+<img src="{{ complaint.file_upload2.url }}" alt="Uploaded File">
+{% endif %}
+{% if complaint.file_upload3 %}
+<img src="{{ complaint.file_upload3.url }}" alt="Uploaded File">
+{% endif %}
+{% if complaint.file_upload4 %}
+<img src="{{ complaint.file_upload4.url }}" alt="Uploaded File">
+{% endif %}
+{% if complaint.file_upload5 %}
+<img src="{{ complaint.file_upload5.url }}" alt="Uploaded File">
+{% endif %}
 
 {% endblock %}

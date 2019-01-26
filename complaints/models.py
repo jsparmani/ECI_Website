@@ -39,6 +39,8 @@ class Complaint(models.Model):
 
     created_at = models.DateTimeField(auto_now=True)
 
+    viewed_complaint = models.BooleanField(default=False)
+
     def __str__(self):
         return self.choice
 
@@ -48,3 +50,5 @@ class Complaint(models.Model):
     class Meta():
         ordering = ['created_at']
         unique_together = ["user", "choice"]
+
+

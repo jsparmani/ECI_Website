@@ -19,6 +19,7 @@
     {% if user.is_authenticated %}
         {% if user.is_authenticated and not user.username == 'government' %}
             <a href="{% url 'complaints:create' %}">Create New Complaint</a>
+            <a href="{% url 'complaints:user_complaints' username=user.username %}">My complaints</a>
         {% endif %}
         
         <a href="{% url 'accounts:logout' %}">Logout</a>
