@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import generic
 from django.urls import reverse_lazy
@@ -7,6 +7,7 @@ from .import forms
 from django.utils.text import slugify
 from django.contrib.auth import get_user_model
 from django.http import Http404
+from django.contrib.auth.decorators import login_required
 User = get_user_model()
 # Create your views here.
 
@@ -198,3 +199,19 @@ class UserComplaints(LoginRequiredMixin, generic.ListView):
         context = super().get_context_data(**kwargs)
         context["complaint_user"] = self.complaint_user
         return context
+
+@login_required
+def add_comment_to_complaint(request,pk):
+    complaint = get_object_or_404(models.Complaint, pk=pk)
+
+    if request.method == 'POST':
+        form = forms.CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.complaint = complaint
+            comment.save()
+            return redirect('complaints:single', pk = complaint.pk)
+    else:
+        form = forms.CommentForm()
+    return render(request, 'complaint/comment_form.html', {'form': form})
+

@@ -52,3 +52,13 @@ class Complaint(models.Model):
         unique_together = ["user", "choice"]
 
 
+class Comment(models.Model):
+    complaint = models.ForeignKey('complaints.Complaint', related_name='comments', on_delete=models.CASCADE)
+    text = models.TextField()
+    created_date = models.DateTimeField(auto_now=True)
+
+    def get_absolute_url(self):
+        return reverse('complaints:single', kwargs={'pk': self.pk})
+
+    def __str__(self):
+        return self.text

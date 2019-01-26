@@ -33,4 +33,24 @@
 <img src="{{ complaint.file_upload5.url }}" alt="Uploaded File">
 {% endif %}
 
+<h2>Comments</h2>
+
+{% if user.is_authenticated and user.username == 'government' %}
+
+<p><a href="{% url 'complaints:add_comment_to_complaint' pk=complaint.pk %}">Add Comment</a></p>
+
+{% endif %}
+
+{% for comment in complaint.comments.all %}
+    <ul>
+        <li>
+            <p>{{ comment.text|safe|linebreaks }}</p>
+            
+        </li>
+    </ul>
+    {% empty %}
+    <p>
+        NO COMMENTS POSTED!!!
+    </p>
+{% endfor %}
 {% endblock %}

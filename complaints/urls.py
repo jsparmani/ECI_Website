@@ -15,4 +15,5 @@ urlpatterns = [
     path('display_type_stats/<slug:type>', views.display_type_stats, name='display_type_stats'),
     path('details/<int:pk>', views.ComplaintDetail.as_view(), name='single'),
     path('by/<slug:username>', views.UserComplaints.as_view(), name='user_complaints'),
+    path('post/<int:pk>', views.add_comment_to_complaint, name='add_comment_to_complaint'),
 ]

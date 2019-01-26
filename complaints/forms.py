@@ -49,3 +49,10 @@ class get_type_num_form(forms.Form):
     ]
 
     type = forms.ChoiceField(choices=COMPLAINT_CHOICES)
+
+
+class CommentForm(forms.ModelForm):
+
+    class Meta():
+        model = models.Comment
+        fields = ('text',)
