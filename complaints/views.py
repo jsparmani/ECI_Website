@@ -87,7 +87,9 @@ def get_type_num(request):
             type = form.cleaned_data['type']
             type = slugify(type)
             const = form.cleaned_data['const']
-            return redirect('complaints:complaint_list', type=type, const=const)
+            select_all = form.cleaned_data['select_all']
+            select_all = int(select_all)
+            return redirect('complaints:complaint_list', type=type, const=const, select_all=select_all)
         # const = request.POST['const']
     else:
         form = forms.get_type_num_form()
@@ -147,8 +149,19 @@ class ComplaintList(generic.ListView, LoginRequiredMixin):
     def get_queryset(self):
         queryset = super().get_queryset()
         type_new = self.kwargs.get("type").replace("-", " ")
+        select_all = self.kwargs.get("select_all")
+        if type_new=='all' and select_all==0:
+            return queryset.filter(user__voter_details__cons_no__iexact=self.kwargs.get("const"))
 
+        if type_new=='all' and select_all==1:
+            return queryset
+        
+        if type_new!='all' and select_all==1:
+            return queryset.filter(choice__iexact=type_new)
+        
+        
         return queryset.filter(choice__iexact=type_new, user__voter_details__cons_no__iexact=self.kwargs.get("const"))
+        
 
 class ComplaintDetail(generic.DetailView, LoginRequiredMixin):
     model = models.Complaint

@@ -32,9 +32,12 @@ class get_type_form(forms.Form):
 
 class get_type_num_form(forms.Form):
 
-    const = forms.IntegerField()
+    const = forms.IntegerField(initial=0)
+
+    select_all = forms.BooleanField(required=False)
 
     COMPLAINT_CHOICES = [
+        ('All', 'All'),
         ('Booth Capturing', 'Booth Capturing'),
         ('Bogus Voting', 'Bogus Voting'),
         ('Liquor Distribution', 'Liquor Distribution'),

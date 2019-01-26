@@ -5,7 +5,7 @@ app_name = 'complaints'
 
 urlpatterns = [
     path('new/', views.CreateComplaint.as_view(), name="create"),
-    path('list/<slug:type>/<int:const>', views.ComplaintList.as_view(), name="complaint_list"),
+    path('list/<slug:type>/<int:const>/<int:select_all>', views.ComplaintList.as_view(), name="complaint_list"),
     path('display_all/', views.allConstStatus, name='display_all'),
     path('get_const_num', views.get_const_num, name='get_const_num'),
     path('get_type_num', views.get_type_num, name='get_type_num'),
