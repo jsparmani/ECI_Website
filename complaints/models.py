@@ -47,13 +47,20 @@ class Complaint(models.Model):
     def get_absolute_url(self):
         return reverse('home')
 
+    def Constituency_number(self):
+        return self.user.voter_details.cons_no
+    
+    def Booth_number(self):
+        return self.user.voter_details.booth_no
+
     class Meta():
         ordering = ['created_at']
         unique_together = ["user", "choice"]
 
 
 class Comment(models.Model):
-    complaint = models.ForeignKey('complaints.Complaint', related_name='comments', on_delete=models.CASCADE)
+    complaint = models.ForeignKey(
+        'complaints.Complaint', related_name='comments', on_delete=models.CASCADE)
     text = models.TextField()
     created_date = models.DateTimeField(auto_now=True)
 
