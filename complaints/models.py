@@ -11,16 +11,7 @@ class Complaint(models.Model):
 
     user = models.ForeignKey(
         User, related_name='complaints', on_delete=models.CASCADE)
-    """ COMPLAINT_CHOICES = [
-        ('Booth Capturing', 'Booth Capturing'),
-        ('Bogus Voting', 'Bogus Voting'),
-        ('Liquor Distribution', 'Liquor Distribution'),
-        ('Money Distribution', 'Money Distribution'),
-        ('Over Campaigning', 'Over Campaigning'),
-        ('Obstruction to voters', 'Obstruction to voters'),
-        ('No armed forces', 'No armed forces'),
-        ('EVM Malfunctioning', 'EVM Malfunctioning'),
-    ] """
+    
 
     COMPLAINT_CHOICES = []
     type_list = [u['type'] for u in acc_models.ComplaintType.objects.all().values('type')]

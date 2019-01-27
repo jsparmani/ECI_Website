@@ -17,23 +17,11 @@ class get_number(forms.Form):
 
 class get_type_form(forms.Form):
 
-    """ COMPLAINT_CHOICES = [
-        ('Booth Capturing', 'Booth Capturing'),
-        ('Bogus Voting', 'Bogus Voting'),
-        ('Liquor Distribution', 'Liquor Distribution'),
-        ('Money Distribution', 'Money Distribution'),
-        ('Over Campaigning', 'Over Campaigning'),
-        ('Obstruction to voters', 'Obstruction to voters'),
-        ('No armed forces', 'No armed forces'),
-        ('EVM Malfunctioning', 'EVM Malfunctioning'),
-    ] """
-
     COMPLAINT_CHOICES = []
-    type_list = [u['type'] for u in acc_models.ComplaintType.objects.all().values('type')]
+    type_list = [u['type']
+                 for u in acc_models.ComplaintType.objects.all().values('type')]
     for temp in type_list:
-        COMPLAINT_CHOICES.append((temp,temp))
-
-
+        COMPLAINT_CHOICES.append((temp, temp))
 
     type = forms.ChoiceField(choices=COMPLAINT_CHOICES)
 
@@ -44,22 +32,11 @@ class get_type_num_form(forms.Form):
 
     select_all = forms.BooleanField(required=False)
 
-    """ COMPLAINT_CHOICES = [
-        ('All', 'All'),
-        ('Booth Capturing', 'Booth Capturing'),
-        ('Bogus Voting', 'Bogus Voting'),
-        ('Liquor Distribution', 'Liquor Distribution'),
-        ('Money Distribution', 'Money Distribution'),
-        ('Over Campaigning', 'Over Campaigning'),
-        ('Obstruction to voters', 'Obstruction to voters'),
-        ('No armed forces', 'No armed forces'),
-        ('EVM Malfunctioning', 'EVM Malfunctioning'),
-    ] """
-
-    COMPLAINT_CHOICES = [('All','All')]
-    type_list = [u['type'] for u in acc_models.ComplaintType.objects.all().values('type')]
+    COMPLAINT_CHOICES = [('All', 'All')]
+    type_list = [u['type']
+                 for u in acc_models.ComplaintType.objects.all().values('type')]
     for temp in type_list:
-        COMPLAINT_CHOICES.append((temp,temp))
+        COMPLAINT_CHOICES.append((temp, temp))
 
     type = forms.ChoiceField(choices=COMPLAINT_CHOICES)
 
