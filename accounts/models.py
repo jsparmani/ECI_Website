@@ -10,3 +10,10 @@ class Voter(models.Model):
 
     def __str__(self):
         return self.user.username
+
+
+class Constituency(models.Model):
+    booth = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return str(self.pk)

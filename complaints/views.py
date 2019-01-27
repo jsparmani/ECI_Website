@@ -4,6 +4,7 @@ from django.views import generic
 from django.urls import reverse_lazy
 from .import models
 from .import forms
+from accounts import models as acc_models
 from django.utils.text import slugify
 from django.contrib.auth import get_user_model
 from django.http import Http404
@@ -137,7 +138,7 @@ def display_type_stats(request, type):
 
     type = type.replace("-", " ")
 
-    for i in range(1, 10):
+    for i in range(1, acc_models.Constituency.objects.all().count()+1):
         const = models.Complaint.objects.all().filter(
             choice__iexact=type, user__voter_details__cons_no__iexact=i).count()
         dict.update({i: const})
