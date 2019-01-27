@@ -7,8 +7,9 @@ from .import forms
 from accounts import models as acc_models
 from django.utils.text import slugify
 from django.contrib.auth import get_user_model
-from django.http import Http404
+from django.http import Http404, JsonResponse
 from django.contrib.auth.decorators import login_required
+import json
 User = get_user_model()
 # Create your views here.
 
@@ -30,12 +31,21 @@ class CreateComplaint(LoginRequiredMixin, generic.FormView):
 def allConstStatus(request):
     type_dict = acc_models.ComplaintType.objects.all().values('type')
     type_list = [u['type'] for u in type_dict]
+    type_count = []
 
     dict = {}
     for type in type_list:
         num = models.Complaint.objects.all().filter(choice__iexact=type).count()
         dict[type] = num
-    return render(request, 'complaint/display_all_stats.html', {'dict': dict})
+        type_count.append(num)
+    data = {
+        "label": type_list,
+        "value": type_count
+
+    }
+    jsondata = json.dumps(data)
+    return render(request, 'complaint/display_all_stats.html', {'jsondata': jsondata, 'dict': dict})
+
 
 # Get The Constitunecy number to display stats
 

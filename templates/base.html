@@ -28,7 +28,15 @@
         <a href="{% url 'accounts:login' %}">Login</a>
         
     {% endif %}
+    {% block jquery %}
+    {% endblock %}
     {% block content %}
     {% endblock %}
+    <script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.js"></script> -->
+
 </body>
 </html>
