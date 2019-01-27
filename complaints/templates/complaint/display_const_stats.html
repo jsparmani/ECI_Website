@@ -3,6 +3,13 @@
 {% block content %}
 <h1> Stats for {{const}}</h1>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.js"></script>
+<script>
+var jsonobject = JSON.parse('{{ jsondata | escapejs }}');
+</script>
+{% include "complaint/chart.html" %}
+
+
 <ul>
     {% for key,value in dict.items %}
         <li>

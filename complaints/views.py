@@ -99,27 +99,46 @@ def get_type_num(request):
 def display_const_stats(request, const):
     type_dict = acc_models.ComplaintType.objects.all().values('type')
     type_list = [u['type'] for u in type_dict]
+    type_count = []
 
     dict = {}
     for type in type_list:
         num = models.Complaint.objects.all().filter(
             choice__iexact=type, user__voter_details__cons_no__iexact=const).count()
         dict[type] = num
-    return render(request, 'complaint/display_const_stats.html', {'dict': dict})
+        type_count.append(num)
+    data = {
+        "label": type_list,
+        "value": type_count
+
+    }
+    jsondata = json.dumps(data)
+    return render(request, 'complaint/display_const_stats.html', {'jsondata': jsondata, 'dict': dict, 'const':const})
+    
 
 #  Display stats of a particular type
 
 
 def display_type_stats(request, type):
     dict = {}
+    const_list=[]
+    num_list=[]
 
     type = type.replace("-", " ")
 
     for i in range(1, acc_models.Constituency.objects.all().count()+1):
-        const = models.Complaint.objects.all().filter(
+        num = models.Complaint.objects.all().filter(
             choice__iexact=type, user__voter_details__cons_no__iexact=i).count()
-        dict.update({i: const})
-    return render(request, 'complaint/display_type_stats.html', {'dict': dict})
+        dict.update({i: num})
+        const_list.append(str(i))
+        num_list.append(num)
+    data = {
+        "label": const_list,
+        "value": num_list
+
+    }
+    jsondata = json.dumps(data)
+    return render(request, 'complaint/display_type_stats.html', {'dict': dict,'jsondata':jsondata,'type':type})
 
 # Updating viewed boolean value
 
