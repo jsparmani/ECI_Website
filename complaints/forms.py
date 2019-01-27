@@ -1,5 +1,6 @@
 from django import forms
 from .import models
+from accounts import models as acc_models
 
 
 class ComplaintForm(forms.ModelForm):
@@ -16,7 +17,7 @@ class get_number(forms.Form):
 
 class get_type_form(forms.Form):
 
-    COMPLAINT_CHOICES = [
+    """ COMPLAINT_CHOICES = [
         ('Booth Capturing', 'Booth Capturing'),
         ('Bogus Voting', 'Bogus Voting'),
         ('Liquor Distribution', 'Liquor Distribution'),
@@ -25,7 +26,14 @@ class get_type_form(forms.Form):
         ('Obstruction to voters', 'Obstruction to voters'),
         ('No armed forces', 'No armed forces'),
         ('EVM Malfunctioning', 'EVM Malfunctioning'),
-    ]
+    ] """
+
+    COMPLAINT_CHOICES = []
+    type_list = [u['type'] for u in acc_models.ComplaintType.objects.all().values('type')]
+    for temp in type_list:
+        COMPLAINT_CHOICES.append((temp,temp))
+
+
 
     type = forms.ChoiceField(choices=COMPLAINT_CHOICES)
 
@@ -36,7 +44,7 @@ class get_type_num_form(forms.Form):
 
     select_all = forms.BooleanField(required=False)
 
-    COMPLAINT_CHOICES = [
+    """ COMPLAINT_CHOICES = [
         ('All', 'All'),
         ('Booth Capturing', 'Booth Capturing'),
         ('Bogus Voting', 'Bogus Voting'),
@@ -46,7 +54,12 @@ class get_type_num_form(forms.Form):
         ('Obstruction to voters', 'Obstruction to voters'),
         ('No armed forces', 'No armed forces'),
         ('EVM Malfunctioning', 'EVM Malfunctioning'),
-    ]
+    ] """
+
+    COMPLAINT_CHOICES = [('All','All')]
+    type_list = [u['type'] for u in acc_models.ComplaintType.objects.all().values('type')]
+    for temp in type_list:
+        COMPLAINT_CHOICES.append((temp,temp))
 
     type = forms.ChoiceField(choices=COMPLAINT_CHOICES)
 

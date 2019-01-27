@@ -11,7 +11,9 @@
 <h2>Status: Unseen</h2>
 {% endif %}
 
+{% if user.is_authenticated and user.username == 'government' %}
 <h1>{{ complaint.user.username }}</h1>
+{% endif %}
 <p>{{ complaint.created_at }}</p>
 <p>{{ complaint.description }}</p>
 {% if complaint.file_upload %}

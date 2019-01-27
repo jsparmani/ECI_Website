@@ -26,7 +26,7 @@ class CreateComplaint(LoginRequiredMixin, generic.FormView):
 
 # All Data Display for the country
 
-
+""" 
 def allConstStatus(request):
     booth_capturing_num = models.Complaint.objects.all().filter(
         choice__iexact="Booth Capturing").count()
@@ -52,7 +52,17 @@ def allConstStatus(request):
             'obstruction_voters_num': obstruction_voters_num,
             'armed_forces_num': armed_forces_num,
             'evm_malfunctioning_num': evm_malfunctioning_num}
-    return render(request, 'complaint/display_all_stats.html', context=dict)
+    return render(request, 'complaint/display_all_stats.html', context=dict) """
+
+def allConstStatus(request):
+    type_dict = acc_models.ComplaintType.objects.all().values('type')
+    type_list = [u['type'] for u in type_dict]
+
+    dict = {}
+    for type in type_list:
+        num = models.Complaint.objects.all().filter(choice__iexact=type).count()
+        dict[type] = num
+    return render(request, 'complaint/display_all_stats.html',{'dict':dict})
 
 # Get The Constitunecy number to display stats
 
@@ -102,7 +112,7 @@ def get_type_num(request):
 
 # Display stats of a particular constituency
 
-def display_const_stats(request, const):
+""" def display_const_stats(request, const):
     booth_capturing_num = models.Complaint.objects.all().filter(
         choice__iexact="Booth Capturing", user__voter_details__cons_no__iexact=const).count()
     bogus_voting_num = models.Complaint.objects.all().filter(
@@ -128,7 +138,17 @@ def display_const_stats(request, const):
             'obstruction_voters_num': obstruction_voters_num,
             'armed_forces_num': armed_forces_num,
             'evm_malfunctioning_num': evm_malfunctioning_num}
-    return render(request, 'complaint/display_const_stats.html', context=dict)
+    return render(request, 'complaint/display_const_stats.html', context=dict) """
+
+def display_const_stats(request,const):
+    type_dict = acc_models.ComplaintType.objects.all().values('type')
+    type_list = [u['type'] for u in type_dict]
+
+    dict = {}
+    for type in type_list:
+        num = models.Complaint.objects.all().filter(choice__iexact=type, user__voter_details__cons_no__iexact=const).count()
+        dict[type] = num
+    return render(request, 'complaint/display_const_stats.html',{'dict':dict})
 
 #  Display stats of a particular type
 
@@ -215,4 +235,7 @@ def add_comment_to_complaint(request,pk):
     else:
         form = forms.CommentForm()
     return render(request, 'complaint/comment_form.html', {'form': form})
+
+
+
 

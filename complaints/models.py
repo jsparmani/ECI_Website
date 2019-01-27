@@ -1,5 +1,6 @@
 from django.urls import reverse
 from django.db import models
+from accounts import models as acc_models
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
@@ -10,7 +11,7 @@ class Complaint(models.Model):
 
     user = models.ForeignKey(
         User, related_name='complaints', on_delete=models.CASCADE)
-    COMPLAINT_CHOICES = [
+    """ COMPLAINT_CHOICES = [
         ('Booth Capturing', 'Booth Capturing'),
         ('Bogus Voting', 'Bogus Voting'),
         ('Liquor Distribution', 'Liquor Distribution'),
@@ -19,7 +20,12 @@ class Complaint(models.Model):
         ('Obstruction to voters', 'Obstruction to voters'),
         ('No armed forces', 'No armed forces'),
         ('EVM Malfunctioning', 'EVM Malfunctioning'),
-    ]
+    ] """
+
+    COMPLAINT_CHOICES = []
+    type_list = [u['type'] for u in acc_models.ComplaintType.objects.all().values('type')]
+    for temp in type_list:
+        COMPLAINT_CHOICES.append((temp,temp))
 
     choice = models.CharField(
         max_length=50, choices=COMPLAINT_CHOICES, blank=False)
