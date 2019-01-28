@@ -55,6 +55,8 @@ class Complaint(models.Model):
         unique_together = ["user", "choice"]
 
 
+        
+        #model Comment
 class Comment(models.Model):
     complaint = models.ForeignKey(
         'complaints.Complaint', related_name='comments', on_delete=models.CASCADE)
