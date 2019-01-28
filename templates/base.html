@@ -17,10 +17,10 @@
     <a href="{% url 'complaints:get_type_num' %}">View Special List</a>
     {% endif %}
     {% if user.is_authenticated %}
-        {% if user.is_authenticated and not user.username == 'government' %}
-            <a href="{% url 'complaints:create' %}">Create New Complaint</a>
-            <a href="{% url 'complaints:user_complaints' username=user.username %}">My complaints</a>
-        {% endif %}
+    {% block government %}
+    
+    {% endblock %}
+    
         
         <a href="{% url 'accounts:logout' %}">Logout</a>
 

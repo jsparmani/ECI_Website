@@ -5,3 +5,4 @@ from .import models
 admin.site.register(models.Voter)
 admin.site.register(models.Constituency)
 admin.site.register(models.ComplaintType)
+admin.site.register(models.GovUser)
