@@ -13,17 +13,17 @@
     <a href="{% url 'complaints:display_all' %}">Display</a>
     <a href="{% url 'complaints:get_const_num' %}">View Const Specific</a>
     <a href="{% url 'complaints:get_type' %}">View Type Specific</a>
-    {% if user.is_authenticated and user.username == 'government' %}
+    {% if user.is_authenticated and user.username in govname_list %}
     <a href="{% url 'complaints:get_type_num' %}">View Special List</a>
     {% endif %}
     {% if user.is_authenticated %}
     {% block government %}
-    
+    {% if not user.username in govname_list %}
+    <a href="{% url 'complaints:create' %}">Create New Complaint</a>
+    <a href="{% url 'complaints:user_complaints' username=user.username %}">My complaints</a>
+    {% endif %}
     {% endblock %}
-    
-        
         <a href="{% url 'accounts:logout' %}">Logout</a>
-
     {% else %}
         <a href="{% url 'accounts:login' %}">Login</a>
         

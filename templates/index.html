@@ -3,14 +3,4 @@
 {% block content %}
     <h1>Welcome</h1>
     
-
-{% endblock %}
-{% block government %}
-
-{% if not user.username in govname_list %}
-<a href="{% url 'complaints:create' %}">Create New Complaint</a>
-<a href="{% url 'complaints:user_complaints' username=user.username %}">My complaints</a>
-{% endif %}
-
-
 {% endblock %}
