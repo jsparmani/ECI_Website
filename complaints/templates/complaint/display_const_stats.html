@@ -6,6 +6,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.js"></script>
 <script>
 var jsonobject = JSON.parse('{{ jsondata | escapejs }}');
+
 </script>
 {% include "complaint/chart.html" %}
 
@@ -17,7 +18,8 @@ var jsonobject = JSON.parse('{{ jsondata | escapejs }}');
                 {{key}}:{{value}}
             </p>
         </li>
-    {% endfor %}
+        
+        {% endfor %}
 </ul>
 
 {% endblock %}

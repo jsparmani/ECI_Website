@@ -37,7 +37,7 @@ def allConstStatus(request):
     for type in type_list:
         num = models.Complaint.objects.all().filter(choice__iexact=type).count()
         dict[type] = num
-        type_count.append(num)
+        type_count.append(num) 
     data = {
         "label": type_list,
         "value": type_count
@@ -55,11 +55,24 @@ def get_const_num(request):
         form = forms.get_number(request.POST)
         if form.is_valid():
             const = form.cleaned_data['const']
+            const_list = [u['id'] for u in acc_models.Constituency.objects.all().values('id')]
+            
+            if not const in const_list:
+                data = {
+                    'const':[const],
+                }
+                jsondata = json.dumps(data)
+                form = forms.get_number()
+                return render(request, 'complaint/get_constituency.html', {'form': form, 'jsondata':jsondata})
+                # return redirect('complaints:check')
             return redirect('complaints:display_const_stats', const=const)
         # const = request.POST['const']
     else:
         form = forms.get_number()
     return render(request, 'complaint/get_constituency.html', {'form': form})
+
+def check(request):
+    return render(request, 'complaint/check.html')
 
 # Get The type of complaint to display stats
 
@@ -112,6 +125,7 @@ def display_const_stats(request, const):
         "value": type_count
 
     }
+    
     jsondata = json.dumps(data)
     return render(request, 'complaint/display_const_stats.html', {'jsondata': jsondata, 'dict': dict, 'const':const})
     

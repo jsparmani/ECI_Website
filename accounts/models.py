@@ -1,7 +1,19 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib import auth
 
 # Create your models here.
+
+""" class User(auth.Models.User, auth.Models.PermissionsMixin):
+
+    
+    
+    def __str__(self):
+        return self.username
+ """
+
+ 
+
 
 
 class Voter(models.Model):
@@ -18,7 +30,7 @@ class Constituency(models.Model):
     booth = models.PositiveIntegerField(default=0)
 
     def __str__(self):
-        return str(self.pk)
+        return str(self.pk) 
 
 
 class ComplaintType(models.Model):
