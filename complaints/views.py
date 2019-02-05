@@ -71,8 +71,6 @@ def get_const_num(request):
         form = forms.get_number()
     return render(request, 'complaint/get_constituency.html', {'form': form})
 
-def check(request):
-    return render(request, 'complaint/check.html')
 
 # Get The type of complaint to display stats
 

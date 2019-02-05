@@ -11,5 +11,12 @@ class  UserCreateForm(UserCreationForm):
         fields = ['username', 'password1', 'password2']
         model = User """
 
+
+from django import forms
+
+
+class LoginForm(forms.Form):
+    username = forms.CharField(max_length=20)
+    password = forms.CharField(widget = forms.PasswordInput)
     
 
