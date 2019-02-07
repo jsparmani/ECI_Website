@@ -5,13 +5,15 @@ from .import forms
 from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.contrib.auth.models import User
+import json
 from django.core.exceptions import ValidationError
 from .import models
 
 # Create your views here.
 
+
 def login(request):
-    if request.method=='POST':
+    if request.method == 'POST':
         form = forms.LoginForm(request.POST)
         if form.is_valid():
             username = form.cleaned_data['username']
@@ -26,7 +28,8 @@ def login(request):
                 return HttpResponse("Invalid!!!!!!")
     else:
         form = forms.LoginForm()
-    return render(request, 'accounts/login.html', {'form':form})
+    return render(request, 'accounts/login.html', {'form': form})
+
 
 def add_user(request):
     if request.method == 'POST':
@@ -40,12 +43,16 @@ def add_user(request):
             except:
                 user = User.objects.create_user(username, '', password)
                 user.save()
-                return redirect('accounts:add_voter',username=username)
-        return HttpResponse("User with this username already exists")
-
+                return redirect('accounts:add_voter', username=username)
+        data = {
+            'username': ['username']
+        }
+        jsondata = json.dumps(data)
+        form = forms.AddUserForm()
+        return render(request, 'accounts/add_user.html', {'form': form, 'jsondata': jsondata})
     else:
         form = forms.AddUserForm()
-        return render(request, 'accounts/add_user.html', {'form':form})
+        return render(request, 'accounts/add_user.html', {'form': form})
 
 
 def add_voter(request, username):
@@ -57,11 +64,10 @@ def add_voter(request, username):
             voter.save()
             form = forms.AddUserForm()
             return redirect('accounts:add_user')
-            
 
     else:
         form = forms.AddVoterForm()
-        return render(request, 'accounts/add_voter.html', {'form':form,'username':username})
+        return render(request, 'accounts/add_voter.html', {'form': form, 'username': username})
 
 
 def add_gov_user(request):
@@ -77,18 +83,14 @@ def add_gov_user(request):
                 user.save()
                 gov_user = models.GovUser.objects.create(user=user)
                 form = forms.AddUserForm()
-                return render(request,'accounts/add_gov_user.html',{'form':form})
-                
-        return HttpResponse("User with this username already exists")
+                return render(request, 'accounts/add_gov_user.html', {'form': form})
+
+        data = {
+            'username': ['username']
+        }
+        jsondata = json.dumps(data)
+        form = forms.AddUserForm()
+        return render(request, 'accounts/add_gov_user.html', {'form': form, 'jsondata': jsondata})
     else:
         form = forms.AddUserForm()
-    return render(request, 'accounts/add_gov_user.html', {'form':form})
-
-
-                    
-
-
-
-
-
-
+    return render(request, 'accounts/add_gov_user.html', {'form': form})

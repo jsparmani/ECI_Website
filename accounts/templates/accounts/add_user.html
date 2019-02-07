@@ -1,6 +1,19 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{% if jsondata %}
+
+<script>
+var jsonobject = JSON.parse('{{ jsondata | escapejs }}');
+
+var cc = jsonobject['username'];
+
+window.alert(`User with this ${cc} already exists.`);
+
+
+
+</script>
+{% endif %}
 
 <form action="{% url 'accounts:add_user' %}", method="POST">
     {% csrf_token %}

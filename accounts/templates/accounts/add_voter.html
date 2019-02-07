@@ -2,6 +2,7 @@
 
 {% block content %}
 
+
 <form action="{% url 'accounts:add_voter' username=username %}", method="POST">
     {% csrf_token %}
     {{form.as_p}}
