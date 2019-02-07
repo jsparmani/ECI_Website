@@ -11,4 +11,5 @@ urlpatterns = [
     path('logout/',auth_views.LogoutView.as_view(), name = 'logout'),
     path('add_user/',views.add_user,name='add_user'),
     path('add_voter/<str:username>/',views.add_voter,name='add_voter'),
+    path('add_gov_user/',views.add_gov_user,name='add_gov_user'),
 ]

@@ -43,6 +43,7 @@ class ComplaintType(models.Model):
 
 class GovUser(models.Model):
     user = models.OneToOneField(User, related_name="gov", on_delete=models.CASCADE)
+    is_supergov = models.BooleanField(default=False)
     # govname = models.CharField(max_length=30, default = GovUser.gov.user.username)
 
     def __str__(self):

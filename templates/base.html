@@ -17,6 +17,9 @@
     {% if user.is_authenticated and user.username in govname_list %}
     <a href="{% url 'complaints:get_type_num' %}">View Special List</a>
     <a href="{% url 'accounts:add_user' %}">Add User</a>
+    {% if user.gov.is_supergov %}
+    <a href="{% url 'accounts:add_gov_user' %}">Add Gov user</a>
+    {% endif %}
     
 
     {% endif %}
