@@ -14,16 +14,31 @@ User = get_user_model()
 # Create your views here.
 
 
-class CreateComplaint(LoginRequiredMixin, generic.FormView):
+""" class CreateComplaint(LoginRequiredMixin, generic.FormView):
     template_name = 'complaint/complaint_form.html'
     form_class = forms.ComplaintForm
     success_url = reverse_lazy('home')
+    # success_url = reverse_lazy('home', kwargs={'msg_type':2, })
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
         self.object.user = self.request.user
         self.object.save()
         return super().form_valid(form)
+ """
+
+@login_required
+def CreateComplaint(request):
+    if request.method == 'POST':
+        form = forms.ComplaintForm(request.POST)
+        if form.is_valid():
+            complaint = form.save(commit=False)
+            complaint.user = request.user
+            complaint.save()
+            return redirect('sms:send', complaint_type=slugify(complaint.choice), msg_type=2, name=complaint.user.username, phone_num = complaint.user.voter_details.phone_num)
+    else:
+        form = forms.ComplaintForm()
+    return render(request, 'complaint/complaint_form.html', {'form': form})
 
 # All Data Display for the country
 
@@ -100,7 +115,7 @@ def get_type_num(request):
             select_all = int(select_all)
             const_list = [u['id']
                           for u in acc_models.Constituency.objects.all().values('id')]
-            if not const in const_list:
+            if not const in const_list and not select_all:
                 data = {
                     'const': [const],
                 }
@@ -170,7 +185,8 @@ def update_view(request, pk):
     present_complaint = models.Complaint.objects.get(pk=pk)
     present_complaint.viewed_complaint = True
     present_complaint.save()
-    return redirect('complaints:single', pk=pk)
+    # return redirect('complaints:single', pk=pk)
+    return redirect('sms:send',complaint_type=slugify(present_complaint.choice), msg_type=3, name=present_complaint.user.username, phone_num=present_complaint.user.voter_details.phone_num)
 
 # Display stats for govt
 
@@ -231,7 +247,8 @@ def add_comment_to_complaint(request, pk):
             comment = form.save(commit=False)
             comment.complaint = complaint
             comment.save()
-            return redirect('complaints:single', pk=complaint.pk)
+            return redirect('sms:send',complaint_type=slugify(complaint.choice), msg_type=4, name=complaint.user.username, phone_num=complaint.user.voter_details.phone_num)
+
     else:
         form = forms.CommentForm()
     return render(request, 'complaint/comment_form.html', {'form': form})

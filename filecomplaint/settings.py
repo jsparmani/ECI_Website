@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'accounts',
     'complaints',
     'rest_framework',
+    'sms',
 ]
 
 MIDDLEWARE = [

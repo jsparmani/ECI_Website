@@ -19,6 +19,7 @@ from django.contrib import auth
 class Voter(models.Model):
     user = models.OneToOneField(
         User, related_name="voter_details", on_delete=models.CASCADE)
+    phone_num = models.PositiveIntegerField()
     cons_no = models.PositiveIntegerField(blank=False)
     booth_no = models.PositiveIntegerField(blank=False)
 

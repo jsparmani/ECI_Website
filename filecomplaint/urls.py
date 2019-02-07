@@ -25,5 +25,6 @@ urlpatterns = [
     path('welcome/', views.WelcomePage.as_view(),name='welcome'),
     path('thanks/', views.ThanksPage.as_view(),name='thanks'),
     path('complaints/', include('complaints.urls',namespace='complaints')),
+    path('sms/', include('sms.urls',namespace='sms')),
 
 ]

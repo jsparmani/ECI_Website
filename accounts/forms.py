@@ -12,11 +12,34 @@ class  UserCreateForm(UserCreationForm):
         model = User """
 
 
+
 from django import forms
+from .import models
+from django.contrib.auth.models import User
 
 
 class LoginForm(forms.Form):
     username = forms.CharField(max_length=20)
     password = forms.CharField(widget = forms.PasswordInput)
+
+class AddUserForm(forms.ModelForm):
+
+    class Meta():
+        model = User
+        fields = ['username', 'password']
+
+        widgets = {'password': forms.PasswordInput}
+
+class AddVoterForm(forms.ModelForm):
+
+    class Meta():
+        model = models.Voter
+        exclude = ['user']
+
+
+
+
+
+    
     
 

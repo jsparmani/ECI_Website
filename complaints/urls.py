@@ -4,7 +4,7 @@ from .import views
 app_name = 'complaints'
 
 urlpatterns = [
-    path('new/', views.CreateComplaint.as_view(), name="create"),
+    path('new/', views.CreateComplaint, name="create"),
     path('list/<slug:type>/<int:const>/<int:select_all>', views.ComplaintList.as_view(), name="complaint_list"),
     
     path('display_all/', views.allConstStatus, name='display_all'),
