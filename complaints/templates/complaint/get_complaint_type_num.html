@@ -2,6 +2,20 @@
 
 {% block content %}
 
+{% if jsondata %}
+
+<script>
+var jsonobject = JSON.parse('{{ jsondata | escapejs }}');
+
+var cc = jsonobject['const'];
+
+window.alert(`${cc} is not a valid constituency number.`);
+
+
+
+</script>
+{% endif %}
+
     
     <form action="{% url 'complaints:get_type_num' %}" method="POST">
         {% csrf_token %}
@@ -9,14 +23,6 @@
         <input type="submit" value="View">
     </form>
 
-    <!-- <select name="type">
-        <option value="Booth Capturing">Booth Capturing</option>
-        <option value="Bogus Voting">Bogus Voting</option>
-        <option value="Obstruction to Voters">Obstruction to Voters</option>
-        <option value="Money Distribution">Money Distribution</option>
-        <option value="Liquor Distribution">Liquor Distribution</option>
-        <option value="No Armed Forces">No Armed Forces</option>
-        <option value="EVM Malfunction">EVM Malfunction</option>
-    </select> -->
+
 
 {% endblock %}

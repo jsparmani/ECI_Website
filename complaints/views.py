@@ -37,7 +37,7 @@ def allConstStatus(request):
     for type in type_list:
         num = models.Complaint.objects.all().filter(choice__iexact=type).count()
         dict[type] = num
-        type_count.append(num) 
+        type_count.append(num)
     data = {
         "label": type_list,
         "value": type_count
@@ -55,16 +55,17 @@ def get_const_num(request):
         form = forms.get_number(request.POST)
         if form.is_valid():
             const = form.cleaned_data['const']
-            const_list = [u['id'] for u in acc_models.Constituency.objects.all().values('id')]
-            
+            const_list = [u['id']
+                          for u in acc_models.Constituency.objects.all().values('id')]
+
             if not const in const_list:
                 data = {
-                    'const':[const],
+                    'const': [const],
                 }
                 jsondata = json.dumps(data)
                 form = forms.get_number()
-                return render(request, 'complaint/get_constituency.html', {'form': form, 'jsondata':jsondata})
-                # return redirect('complaints:check')
+                return render(request, 'complaint/get_constituency.html', {'form': form, 'jsondata': jsondata})
+
             return redirect('complaints:display_const_stats', const=const)
         # const = request.POST['const']
     else:
@@ -97,6 +98,15 @@ def get_type_num(request):
             const = form.cleaned_data['const']
             select_all = form.cleaned_data['select_all']
             select_all = int(select_all)
+            const_list = [u['id']
+                          for u in acc_models.Constituency.objects.all().values('id')]
+            if not const in const_list:
+                data = {
+                    'const': [const],
+                }
+                jsondata = json.dumps(data)
+                form = forms.get_type_num_form()
+                return render(request, 'complaint/get_complaint_type_num.html', {'form': form, 'jsondata': jsondata})
             return redirect('complaints:complaint_list', type=type, const=const, select_all=select_all)
         # const = request.POST['const']
     else:
@@ -123,18 +133,18 @@ def display_const_stats(request, const):
         "value": type_count
 
     }
-    
+
     jsondata = json.dumps(data)
-    return render(request, 'complaint/display_const_stats.html', {'jsondata': jsondata, 'dict': dict, 'const':const})
-    
+    return render(request, 'complaint/display_const_stats.html', {'jsondata': jsondata, 'dict': dict, 'const': const})
+
 
 #  Display stats of a particular type
 
 
 def display_type_stats(request, type):
     dict = {}
-    const_list=[]
-    num_list=[]
+    const_list = []
+    num_list = []
 
     type = type.replace("-", " ")
 
@@ -150,11 +160,12 @@ def display_type_stats(request, type):
 
     }
     jsondata = json.dumps(data)
-    return render(request, 'complaint/display_type_stats.html', {'dict': dict,'jsondata':jsondata,'type':type})
+    return render(request, 'complaint/display_type_stats.html', {'dict': dict, 'jsondata': jsondata, 'type': type})
 
 # Updating viewed boolean value
 
 
+@login_required
 def update_view(request, pk):
     present_complaint = models.Complaint.objects.get(pk=pk)
     present_complaint.viewed_complaint = True
