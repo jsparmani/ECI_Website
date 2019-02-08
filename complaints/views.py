@@ -12,26 +12,10 @@ from django.contrib.auth.decorators import login_required
 import json
 User = get_user_model()
 
-# Create your views here.
-
-
-""" class CreateComplaint(LoginRequiredMixin, generic.FormView):
-    template_name = 'complaint/complaint_form.html'
-    form_class = forms.ComplaintForm
-    success_url = reverse_lazy('home')
-    # success_url = reverse_lazy('home', kwargs={'msg_type':2, })
-
-    def form_valid(self, form):
-        self.object = form.save(commit=False)
-        self.object.user = self.request.user
-        self.object.save()
-        return super().form_valid(form)
- """
-
 @login_required
 def CreateComplaint(request):
     if request.method == 'POST':
-        form = forms.ComplaintForm(request.POST)
+        form = forms.ComplaintForm(request.POST, request.FILES)
         if form.is_valid():
             complaint = form.save(commit=False)
             complaint.user = request.user

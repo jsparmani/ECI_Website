@@ -13,100 +13,6 @@ import datetime
 # Create your views here.
 
 
-def login(request, pk):
-    temp_user = models.TempUser.objects.get(pk=pk)
-    if request.method == 'POST':
-        form = forms.OtpForm(request.POST)
-        if form.is_valid():
-            otp = form.cleaned_data['otp']
-            
-            if otp==temp_user.otp:
-                user = authenticate(request,username=temp_user.username, password=temp_user.password)
-                t1 = f'{str(temp_user.send_time)[11:13:]}:{str(temp_user.send_time)[14:16:]}:{str(temp_user.send_time)[17:19:]}'
-                
-                t2 = f'{str(datetime.datetime.now().hour)}:{str(datetime.datetime.now().minute)}:{str(datetime.datetime.now().second)}'
-                
-                FMT = '%H:%M:%S'
-                diff = datetime.datetime.strptime(t2, FMT) - datetime.datetime.strptime(t1,FMT)
-                
-                if diff.total_seconds() < 600:
-                    auth_login(request, user)
-                    models.TempUser.objects.get(pk=pk).delete()
-                    return redirect('home')
-                else:
-                    models.TempUser.objects.get(pk=pk).delete()
-                    return HttpResponse("Time Limit Exceeded. Try Again.")
-            else:
-                models.TempUser.objects.get(pk=pk).delete()
-                return HttpResponse("Invalid OTP. Try Again.")
-    else:
-        form = forms.OtpForm()
-    return render(request, 'accounts/otp_form.html', {'form': form, 'pk':pk})
-
-
-def add_user(request):
-    if request.method == 'POST':
-        form = forms.AddUserForm(request.POST)
-        if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
-            # password2 = form.cleaned_data['password2']
-            try:
-                temp = User.objects.get(username=username)
-            except:
-                user = User.objects.create_user(username, '', password)
-                user.save()
-                return redirect('accounts:add_voter', username=username)
-        data = {
-            'username': ['username']
-        }
-        jsondata = json.dumps(data)
-        form = forms.AddUserForm()
-        return render(request, 'accounts/add_user.html', {'form': form, 'jsondata': jsondata})
-    else:
-        form = forms.AddUserForm()
-        return render(request, 'accounts/add_user.html', {'form': form})
-
-
-def add_voter(request, username):
-    if request.method == 'POST':
-        form = forms.AddVoterForm(request.POST)
-        if form.is_valid():
-            voter = form.save(commit=False)
-            voter.user = User.objects.get(username=username)
-            voter.save()
-            form = forms.AddUserForm()
-            return redirect('accounts:add_user')
-
-    else:
-        form = forms.AddVoterForm()
-        return render(request, 'accounts/add_voter.html', {'form': form, 'username': username})
-
-
-def add_gov_user(request):
-    if request.method == 'POST':
-        form = forms.AddUserForm(request.POST)
-        if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
-            try:
-                temp = User.objects.get(username=username)
-            except:
-                user = User.objects.create_user(username, '', password)
-                user.save()
-                gov_user = models.GovUser.objects.create(user=user)
-                form = forms.AddUserForm()
-                return render(request, 'accounts/add_gov_user.html', {'form': form})
-
-        data = {
-            'username': ['username']
-        }
-        jsondata = json.dumps(data)
-        form = forms.AddUserForm()
-        return render(request, 'accounts/add_gov_user.html', {'form': form, 'jsondata': jsondata})
-    else:
-        form = forms.AddUserForm()
-    return render(request, 'accounts/add_gov_user.html', {'form': form})
 
 def TempLogin(request):
     if request.method == 'POST':
@@ -135,8 +41,113 @@ def TempLogin(request):
                 temp_user = models.TempUser.objects.create(username=username, password=password, phone_num=phone_num, otp = otp)
                 return redirect('sms:send_otp', pk=temp_user.pk)
             else:
-                ########### CHANGE ############
-                return HttpResponse("Invalid!!!!!!")
+                return redirect('fault',fault="Invalid Credentials. Please Try Again.")
     else:
         form = forms.LoginForm()
     return render(request, 'accounts/login.html', {'form': form})
+
+
+
+
+def login(request, pk):
+    temp_user = models.TempUser.objects.get(pk=pk)
+    if request.method == 'POST':
+        form = forms.OtpForm(request.POST)
+        if form.is_valid():
+            otp = form.cleaned_data['otp']
+            
+            if otp==temp_user.otp:
+                user = authenticate(request,username=temp_user.username, password=temp_user.password)
+                t1 = f'{str(temp_user.send_time)[11:13:]}:{str(temp_user.send_time)[14:16:]}:{str(temp_user.send_time)[17:19:]}'
+                
+                t2 = f'{str(datetime.datetime.now().hour)}:{str(datetime.datetime.now().minute)}:{str(datetime.datetime.now().second)}'
+                
+                FMT = '%H:%M:%S'
+                diff = datetime.datetime.strptime(t2, FMT) - datetime.datetime.strptime(t1,FMT)
+                
+                if diff.total_seconds() < 600:
+                    auth_login(request, user)
+                    models.TempUser.objects.get(pk=pk).delete()
+                    return redirect('home')
+                else:
+                    models.TempUser.objects.get(pk=pk).delete()
+                    return redirect('fault',fault="Time Limit Exceeded. Please Try Again.")
+            else:
+                models.TempUser.objects.get(pk=pk).delete()
+                return redirect('fault',fault="Invalid OTP. Please Try Again.")
+    else:
+        form = forms.OtpForm()
+    return render(request, 'accounts/otp_form.html', {'form': form, 'pk':pk})
+
+
+
+
+
+def add_user(request):
+    if request.method == 'POST':
+        form = forms.AddUserForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            try:
+                temp = User.objects.get(username=username)
+            except:
+                user = User.objects.create_user(username, '', password)
+                user.save()
+                return redirect('accounts:add_voter', username=username)
+        data = {
+            'username': ['username']
+        }
+        jsondata = json.dumps(data)
+        form = forms.AddUserForm()
+        return render(request, 'accounts/add_user.html', {'form': form, 'jsondata': jsondata})
+    else:
+        form = forms.AddUserForm()
+        return render(request, 'accounts/add_user.html', {'form': form})
+
+
+
+
+def add_voter(request, username):
+    if request.method == 'POST':
+        form = forms.AddVoterForm(request.POST)
+        if form.is_valid():
+            voter = form.save(commit=False)
+            voter.user = User.objects.get(username=username)
+            voter.save()
+            form = forms.AddUserForm()
+            return redirect('accounts:add_user')
+
+    else:
+        form = forms.AddVoterForm()
+        return render(request, 'accounts/add_voter.html', {'form': form, 'username': username})
+
+
+
+
+
+def add_gov_user(request):
+    if request.method == 'POST':
+        form = forms.AddUserForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            try:
+                temp = User.objects.get(username=username)
+            except:
+                user = User.objects.create_user(username, '', password)
+                user.save()
+                gov_user = models.GovUser.objects.create(user=user)
+                form = forms.AddUserForm()
+                return render(request, 'accounts/add_gov_user.html', {'form': form})
+
+        data = {
+            'username': ['username']
+        }
+        jsondata = json.dumps(data)
+        form = forms.AddUserForm()
+        return render(request, 'accounts/add_gov_user.html', {'form': form, 'jsondata': jsondata})
+    else:
+        form = forms.AddUserForm()
+    return render(request, 'accounts/add_gov_user.html', {'form': form})
+
