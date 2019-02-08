@@ -11,6 +11,7 @@ from django.http import Http404, HttpResponse
 from django.contrib.auth.decorators import login_required
 import json
 User = get_user_model()
+
 # Create your views here.
 
 
@@ -54,6 +55,8 @@ def allConstStatus(request):
         num = models.Complaint.objects.all().filter(choice__iexact=type).count()
         dict[type] = num
         type_count.append(num)
+
+    # Data for charts
     data = {
         "label": type_list,
         "value": type_count
