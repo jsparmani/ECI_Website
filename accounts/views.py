@@ -21,8 +21,22 @@ def login(request, pk):
             temp_user = models.TempUser.objects.get(pk=pk)
             if otp==temp_user.otp:
                 user = authenticate(request,username=temp_user.username, password=temp_user.password)
-                auth_login(request, user)
-                return redirect('home')
+                t1 = f'{str(temp_user.send_time)[11:13:]}:{str(temp_user.send_time)[14:16:]}:{str(temp_user.send_time)[17:19:]}'
+                
+                t2 = f'{str(datetime.datetime.now().hour)}:{str(datetime.datetime.now().minute)}:{str(datetime.datetime.now().second)}'
+                
+                FMT = '%H:%M:%S'
+                diff = datetime.datetime.strptime(t2, FMT) - datetime.datetime.strptime(t1,FMT)
+                
+                if diff.total_seconds() < 600:
+                    auth_login(request, user)
+                    return redirect('home')
+                else:
+                    return HttpResponse("Time Limit Exceeded. Try Again.")               
+
+                
+
+                
                 # timediff = datetime.datetime.now()-temp_user.send_time
                 # if timediff.total_seconds<=600:
                 #     auth_login(request, user)
