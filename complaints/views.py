@@ -7,7 +7,7 @@ from .import forms
 from accounts import models as acc_models
 from django.utils.text import slugify
 from django.contrib.auth import get_user_model
-from django.http import Http404, JsonResponse
+from django.http import Http404, HttpResponse
 from django.contrib.auth.decorators import login_required
 import json
 User = get_user_model()
@@ -198,9 +198,11 @@ class ComplaintList(generic.ListView, LoginRequiredMixin):
     template_name = 'complaint/complaint_list.html'
 
     def get_queryset(self):
+        
         queryset = super().get_queryset()
         type_new = self.kwargs.get("type").replace("-", " ")
         select_all = self.kwargs.get("select_all")
+        
         if type_new == 'all' and select_all == 0:
             return queryset.filter(user__voter_details__cons_no__iexact=self.kwargs.get("const"))
 

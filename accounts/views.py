@@ -3,32 +3,36 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login
 from .import forms
 from django.http import HttpResponse
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.contrib.auth.models import User
 import json
 from django.core.exceptions import ValidationError
 from .import models
-
+from random import randint
+import datetime
 # Create your views here.
 
 
-def login(request):
+def login(request, pk):
     if request.method == 'POST':
-        form = forms.LoginForm(request.POST)
+        form = forms.OtpForm(request.POST)
         if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
-
-            user = authenticate(request, username=username, password=password)
-
-            if user is not None:
+            otp = form.cleaned_data['otp']
+            temp_user = models.TempUser.objects.get(pk=pk)
+            if otp==temp_user.otp:
+                user = authenticate(request,username=temp_user.username, password=temp_user.password)
                 auth_login(request, user)
-                return redirect('welcome')
+                return redirect('home')
+                # timediff = datetime.datetime.now()-temp_user.send_time
+                # if timediff.total_seconds<=600:
+                #     auth_login(request, user)
+                # else:
+                #     return HttpResponse("Time Limit Exceeded. Try Again.")
             else:
-                return HttpResponse("Invalid!!!!!!")
+                return HttpResponse("Invalid OTP. Try Again.")
     else:
-        form = forms.LoginForm()
-    return render(request, 'accounts/login.html', {'form': form})
+        form = forms.OtpForm()
+    return render(request, 'accounts/otp_form.html', {'form': form, 'pk':pk})
 
 
 def add_user(request):
@@ -94,3 +98,36 @@ def add_gov_user(request):
     else:
         form = forms.AddUserForm()
     return render(request, 'accounts/add_gov_user.html', {'form': form})
+
+def TempLogin(request):
+    if request.method == 'POST':
+        form = forms.LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+
+            tuser = authenticate(request, username=username, password=password)
+            id_list = [u['user'] for u in models.GovUser.objects.all().values('user')]
+            govname_list=[]
+            for num in id_list:
+                temp = User.objects.get(id__iexact = num)
+                temp_name = temp.username
+                govname_list.append(temp_name)
+            
+
+            if tuser is not None:
+                if username in govname_list:
+                    user1 = models.GovUser.objects.get(user__username__iexact=username)
+                    phone_num=user1.phone_num
+                else:
+                    user1 = models.Voter.objects.get(user__username__iexact=username)
+                    phone_num = user1.phone_num
+                otp = randint(100000, 999999)
+                temp_user = models.TempUser.objects.create(username=username, password=password, phone_num=phone_num, otp = otp)
+                return redirect('sms:send_otp', pk=temp_user.pk)
+            else:
+                ########### CHANGE ############
+                return HttpResponse("Invalid!!!!!!")
+    else:
+        form = forms.LoginForm()
+    return render(request, 'accounts/login.html', {'form': form})

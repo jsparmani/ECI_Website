@@ -37,6 +37,10 @@ class AddVoterForm(forms.ModelForm):
         exclude = ['user']
 
 
+class OtpForm(forms.Form):
+    otp = forms.IntegerField()
+
+
 
 
 

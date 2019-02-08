@@ -7,7 +7,8 @@ app_name = 'accounts'
 
 urlpatterns = [
     # path('login/',auth_views.LoginView.as_view(template_name = 'accounts/login.html'), name = 'login'),
-    path('login/', views.login, name='login'),
+    path('login/', views.TempLogin, name='login'),
+    path('login/1/<int:pk>/', views.login, name='permanent_login'),
     path('logout/',auth_views.LogoutView.as_view(), name = 'logout'),
     path('add_user/',views.add_user,name='add_user'),
     path('add_voter/<str:username>/',views.add_voter,name='add_voter'),
