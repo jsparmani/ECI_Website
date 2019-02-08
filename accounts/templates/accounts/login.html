@@ -6,5 +6,10 @@
         {{ form.as_p }}
         <input type="submit" value="Log In">
     </form>
+    
+    <p><a href="{% url 'admin_password_reset' %}">Forgot Password(Only for GOV)</a></p>
+    <br>
+    <p>For logging in as a voter use issue date of your voter id card as password.</p>
+    
 
 {% endblock %}

@@ -7,7 +7,7 @@ app_name = 'sms'
 
 
 urlpatterns = [
-    path('send/<slug:complaint_type>/<int:msg_type>/<slug:name>/<int:phone_num>/', views.send, name='send'),
+    path('send/<slug:complaint_type>/<int:msg_type>/<slug:name>/<int:phone_num>/<int:pk>/', views.send, name='send'),
     
 
 ]

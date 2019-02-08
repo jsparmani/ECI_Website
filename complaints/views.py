@@ -35,7 +35,8 @@ def CreateComplaint(request):
             complaint = form.save(commit=False)
             complaint.user = request.user
             complaint.save()
-            return redirect('sms:send', complaint_type=slugify(complaint.choice), msg_type=2, name=complaint.user.username, phone_num = complaint.user.voter_details.phone_num)
+            pk=0
+            return redirect('sms:send', complaint_type=slugify(complaint.choice), msg_type=2, name=complaint.user.username, phone_num = complaint.user.voter_details.phone_num, pk=pk)
     else:
         form = forms.ComplaintForm()
     return render(request, 'complaint/complaint_form.html', {'form': form})
@@ -185,8 +186,9 @@ def update_view(request, pk):
     present_complaint = models.Complaint.objects.get(pk=pk)
     present_complaint.viewed_complaint = True
     present_complaint.save()
+    
     # return redirect('complaints:single', pk=pk)
-    return redirect('sms:send',complaint_type=slugify(present_complaint.choice), msg_type=3, name=present_complaint.user.username, phone_num=present_complaint.user.voter_details.phone_num)
+    return redirect('sms:send',complaint_type=slugify(present_complaint.choice), msg_type=3, name=present_complaint.user.username, phone_num=present_complaint.user.voter_details.phone_num, pk=pk)
 
 # Display stats for govt
 
@@ -247,7 +249,7 @@ def add_comment_to_complaint(request, pk):
             comment = form.save(commit=False)
             comment.complaint = complaint
             comment.save()
-            return redirect('sms:send',complaint_type=slugify(complaint.choice), msg_type=4, name=complaint.user.username, phone_num=complaint.user.voter_details.phone_num)
+            return redirect('sms:send',complaint_type=slugify(complaint.choice), msg_type=4, name=complaint.user.username, phone_num=complaint.user.voter_details.phone_num, pk=complaint.pk)
 
     else:
         form = forms.CommentForm()
