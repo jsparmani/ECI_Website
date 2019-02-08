@@ -37,8 +37,14 @@ class AddVoterForm(forms.ModelForm):
         exclude = ['user']
 
 
+class AddGovPhoneForm(forms.ModelForm):
+
+    class Meta():
+        model = models.GovUser
+        fields = ['phone_num']
+
 class OtpForm(forms.Form):
-    otp = forms.IntegerField()
+    otp = forms.IntegerField(widget=forms.PasswordInput)
 
 
 

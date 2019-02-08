@@ -21,8 +21,12 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 
-
 from .import views
+
+
+admin.site.site_header = 'ELECTION COMMISSION OF INDIA'
+admin.site.site_title = 'Election Commission Of India Administration'
+admin.site.index_title = 'Election Commission Of India Administration'
 
 urlpatterns = [
     path('admin/', admin.site.urls),

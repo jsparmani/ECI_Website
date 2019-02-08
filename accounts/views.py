@@ -137,9 +137,7 @@ def add_gov_user(request):
             except:
                 user = User.objects.create_user(username, '', password)
                 user.save()
-                gov_user = models.GovUser.objects.create(user=user)
-                form = forms.AddUserForm()
-                return render(request, 'accounts/add_gov_user.html', {'form': form})
+                return redirect('accounts:add_gov_user_phone', username=username)
 
         data = {
             'username': ['username']
@@ -150,4 +148,19 @@ def add_gov_user(request):
     else:
         form = forms.AddUserForm()
     return render(request, 'accounts/add_gov_user.html', {'form': form})
+
+
+def add_gov_user_phone(request, username):
+    if request.method == 'POST':
+        form = forms.AddGovPhoneForm(request.POST)
+        if form.is_valid():
+            gov = form.save(commit=False)
+            gov.user = User.objects.get(username=username)
+            gov.save()
+            form = forms.AddUserForm()
+            return redirect('accounts:add_gov_user')
+
+    else:
+        form = forms.AddGovPhoneForm()
+        return render(request, 'accounts/add_gov_user_phone.html', {'form': form, 'username': username})
 

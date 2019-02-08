@@ -171,11 +171,12 @@ def display_type_stats(request, type):
 @login_required
 def update_view(request, pk):
     present_complaint = models.Complaint.objects.get(pk=pk)
-    present_complaint.viewed_complaint = True
-    present_complaint.save()
-    
-    # return redirect('complaints:single', pk=pk)
-    return redirect('sms:send',complaint_type=slugify(present_complaint.choice), msg_type=3, name=present_complaint.user.username, phone_num=present_complaint.user.voter_details.phone_num, pk=pk)
+    if present_complaint.viewed_complaint == False:
+        present_complaint.viewed_complaint = True
+        present_complaint.save()
+        return redirect('sms:send',complaint_type=(present_complaint.choice), msg_type=3, name=present_complaint.user.username, phone_num=present_complaint.user.voter_details.phone_num, pk=pk)
+    else:
+        return redirect('complaints:single', pk=pk)
 
 # Display stats for govt
 
