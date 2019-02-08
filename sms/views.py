@@ -33,8 +33,9 @@ def send_otp(request, pk):
     api_key = '292a8d1f-295e-11e9-9ee8-0200cd936042'
     msg_type = 1
     template_name = 'OTP'
-    link = f'https://2factor.in/API/R1/?module=TRANS_SMS&apikey={api_key}&to={phone_num}&from=ECIWEB&templatename={template_name}&var1={username}&var2={otp}'
-    requests.get(link)
+    print(otp)
+    # link = f'https://2factor.in/API/R1/?module=TRANS_SMS&apikey={api_key}&to={phone_num}&from=ECIWEB&templatename={template_name}&var1={username}&var2={otp}'
+    # requests.get(link)
     # return HttpResponse(f'{temp_user.username} {temp_user.phone_num} {temp_user.otp}')
     return redirect('accounts:permanent_login', pk=pk)
 

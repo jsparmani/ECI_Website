@@ -14,11 +14,12 @@ import datetime
 
 
 def login(request, pk):
+    temp_user = models.TempUser.objects.get(pk=pk)
     if request.method == 'POST':
         form = forms.OtpForm(request.POST)
         if form.is_valid():
             otp = form.cleaned_data['otp']
-            temp_user = models.TempUser.objects.get(pk=pk)
+            
             if otp==temp_user.otp:
                 user = authenticate(request,username=temp_user.username, password=temp_user.password)
                 t1 = f'{str(temp_user.send_time)[11:13:]}:{str(temp_user.send_time)[14:16:]}:{str(temp_user.send_time)[17:19:]}'
@@ -30,19 +31,13 @@ def login(request, pk):
                 
                 if diff.total_seconds() < 600:
                     auth_login(request, user)
+                    models.TempUser.objects.get(pk=pk).delete()
                     return redirect('home')
                 else:
-                    return HttpResponse("Time Limit Exceeded. Try Again.")               
-
-                
-
-                
-                # timediff = datetime.datetime.now()-temp_user.send_time
-                # if timediff.total_seconds<=600:
-                #     auth_login(request, user)
-                # else:
-                #     return HttpResponse("Time Limit Exceeded. Try Again.")
+                    models.TempUser.objects.get(pk=pk).delete()
+                    return HttpResponse("Time Limit Exceeded. Try Again.")
             else:
+                models.TempUser.objects.get(pk=pk).delete()
                 return HttpResponse("Invalid OTP. Try Again.")
     else:
         form = forms.OtpForm()
