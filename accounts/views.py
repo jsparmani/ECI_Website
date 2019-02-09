@@ -4,6 +4,8 @@ from django.contrib.auth import login as auth_login
 from .import forms
 from django.http import HttpResponse
 from django.urls import reverse_lazy, reverse
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views import generic
 from django.contrib.auth.models import User
 import json
 from django.core.exceptions import ValidationError
@@ -106,8 +108,6 @@ def add_user(request):
         return render(request, 'accounts/add_user.html', {'form': form})
 
 
-
-
 def add_voter(request, username):
     if request.method == 'POST':
         form = forms.AddVoterForm(request.POST)
@@ -121,9 +121,6 @@ def add_voter(request, username):
     else:
         form = forms.AddVoterForm()
         return render(request, 'accounts/add_voter.html', {'form': form, 'username': username})
-
-
-
 
 
 def add_gov_user(request):
@@ -164,6 +161,7 @@ def add_gov_user_phone(request, username):
         form = forms.AddGovPhoneForm()
         return render(request, 'accounts/add_gov_user_phone.html', {'form': form, 'username': username})
 
+
 def add_constituency(request):
     if request.method == 'POST':
         form = forms.ConstituencyForm(request.POST)
@@ -178,6 +176,33 @@ def add_constituency(request):
     else:
         form = forms.ConstituencyForm()
         return render(request, 'accounts/add_constituency.html',{'form':form}) 
+
+
+# class UpdateConstituency(generic.UpdateView,LoginRequiredMixin):
+#     template_name = 'accounts/constituency_update_form.html'
+#     success_url = reverse_lazy("home")
+#     form_class = forms.ConstituencyForm
+#     model = models.Constituency
+
+def update_constituency(request):
+    if request.method == 'POST':
+        form = forms.UpdateConstituencyForm(request.POST)
+        if form.is_valid():
+            id = form.cleaned_data['id']
+            booth = form.cleaned_data['booth']
+            temp_cons = models.Constituency.objects.all().filter(id__iexact = id)
+            if temp_cons.exists():
+                temp_cons = models.Constituency.objects.get(id__iexact = id)
+                temp_cons.booth = booth
+                temp_cons.save()
+                return redirect('home')
+            else:
+                return redirect('fault', fault = 'This Constituency ID does NOT exists')
+        else:
+            return redirect('fault', fault = 'Something went wrong. Try Again.')
+    else:
+        form = forms.UpdateConstituencyForm()
+        return render(request, 'accounts/constituency_update_form.html',{'form':form}) 
 
 
 def add_complaint_type(request):

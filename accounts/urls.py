@@ -16,4 +16,5 @@ urlpatterns = [
     path('add_gov_user_phone/<str:username>/',views.add_gov_user_phone,name='add_gov_user_phone'),
     path('add_constituency/',views.add_constituency, name = 'add_constituency'),
     path('add_complaint_type/',views.add_complaint_type, name = 'add_complaint_type'),
+    path('update_constituency/',views.update_constituency, name = 'update_constituency'),
 ]

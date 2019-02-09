@@ -37,7 +37,7 @@
 
 <h2>Comments</h2>
 
-{% if user.is_authenticated and user.username == 'government' %}
+{% if user.is_authenticated and user.username in govname_list %}
 
 <p><a href="{% url 'complaints:add_comment_to_complaint' pk=complaint.pk %}">Add Comment</a></p>
 

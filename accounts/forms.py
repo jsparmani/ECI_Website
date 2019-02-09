@@ -53,6 +53,10 @@ class ConstituencyForm(forms.ModelForm):
         model = models.Constituency
         fields = '__all__'
 
+class UpdateConstituencyForm(forms.Form):
+    id = forms.IntegerField()
+    booth = forms.IntegerField()
+
 
 class ComplaintTypeForm(forms.ModelForm):
 
