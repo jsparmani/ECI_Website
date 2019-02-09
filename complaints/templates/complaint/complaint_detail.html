@@ -35,6 +35,16 @@
 <a href="{{ complaint.file_upload5.url }}" target="_blank">View File</a>
 {% endif %}
 
+{% if user.is_authenticated and not user.username in govname_list %}
+<p>Like: <a href="{% url 'complaints:like' pk=complaint.pk %}">{{complaint.is_liked}}</a></p>
+<p>Dislike: <a href="{% url 'complaints:dislike' pk=complaint.pk %}">{{complaint.is_disliked}}</a></p>
+{% endif %}
+
+{% if user.is_authenticated and user.username in govname_list %}
+<p>Like: {{complaint.is_liked}}</p>
+<p>Dislike: {{complaint.is_disliked}}</p>
+{% endif %}
+
 <h2>Comments</h2>
 
 {% if user.is_authenticated and user.username in govname_list %}

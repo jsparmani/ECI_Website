@@ -38,6 +38,9 @@ class Complaint(models.Model):
 
     viewed_complaint = models.BooleanField(default=False)
 
+    is_liked = models.BooleanField(default=False)
+    is_disliked = models.BooleanField(default=False)
+
     def __str__(self):
         return self.choice
 

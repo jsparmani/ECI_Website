@@ -269,3 +269,32 @@ def add_comment_to_complaint(request, pk):
     else:
         form = forms.CommentForm()
     return render(request, 'complaint/comment_form.html', {'form': form})
+
+
+
+
+
+@login_required
+def likes(request,pk):
+    complaint = models.Complaint.objects.get(pk__iexact = pk)
+    if complaint.is_liked == True:
+        complaint.is_liked = False
+        complaint.save()
+    elif complaint.is_liked == False:
+        complaint.is_liked = True
+        complaint.is_disliked = False
+        complaint.save()
+    return redirect('complaints:single', pk=pk)
+
+
+@login_required
+def dislikes(request,pk):
+    complaint = models.Complaint.objects.get(pk__iexact = pk)
+    if complaint.is_disliked == True:
+        complaint.is_disliked = False
+        complaint.save()
+    elif complaint.is_disliked == False:
+        complaint.is_disliked = True
+        complaint.is_liked = False
+        complaint.save()
+    return redirect('complaints:single', pk=pk)    

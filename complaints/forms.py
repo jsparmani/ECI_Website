@@ -7,7 +7,7 @@ class ComplaintForm(forms.ModelForm):
 
     class Meta():
         model = models.Complaint
-        exclude = ['user', 'created_at', 'viewed_complaint']
+        exclude = ['user', 'created_at', 'viewed_complaint', 'is_liked', 'is_disliked']
 
 
 class get_number(forms.Form):
