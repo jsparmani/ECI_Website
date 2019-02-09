@@ -17,11 +17,17 @@ def CreateComplaint(request):
     if request.method == 'POST':
         form = forms.ComplaintForm(request.POST, request.FILES)
         if form.is_valid():
-            complaint = form.save(commit=False)
-            complaint.user = request.user
-            complaint.save()
-            pk=0
-            return redirect('sms:send', complaint_type=slugify(complaint.choice), msg_type=2, name=complaint.user.username, phone_num = complaint.user.voter_details.phone_num, pk=pk)
+            try:
+                complaint = form.save(commit=False)
+                complaint.user = request.user
+                complaint.save()
+                pk=0
+                return redirect('sms:send', complaint_type=slugify(complaint.choice), msg_type=2, name=complaint.user.username, phone_num = complaint.user.voter_details.phone_num, pk=pk)
+            except:
+                return redirect('fault', fault ="The record for this complaint already exists and is under progress")
+
+        else:
+            return redirect('fault', fault ="Something went wrong try again")
     else:
         form = forms.ComplaintForm()
     return render(request, 'complaint/complaint_form.html', {'form': form})

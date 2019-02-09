@@ -49,8 +49,6 @@ def TempLogin(request):
     return render(request, 'accounts/login.html', {'form': form})
 
 
-
-
 def login(request, pk):
     temp_user = models.TempUser.objects.get(pk=pk)
     if request.method == 'POST':
@@ -80,9 +78,6 @@ def login(request, pk):
     else:
         form = forms.OtpForm()
     return render(request, 'accounts/otp_form.html', {'form': form, 'pk':pk})
-
-
-
 
 
 def add_user(request):
@@ -178,12 +173,6 @@ def add_constituency(request):
         return render(request, 'accounts/add_constituency.html',{'form':form}) 
 
 
-# class UpdateConstituency(generic.UpdateView,LoginRequiredMixin):
-#     template_name = 'accounts/constituency_update_form.html'
-#     success_url = reverse_lazy("home")
-#     form_class = forms.ConstituencyForm
-#     model = models.Constituency
-
 def update_constituency(request):
     if request.method == 'POST':
         form = forms.UpdateConstituencyForm(request.POST)
@@ -208,7 +197,6 @@ def update_constituency(request):
 class ConstituencyList(generic.ListView):
     model = models.Constituency
     template_name = "accounts/constituency_list.html"
-
 
 
 def add_complaint_type(request):
