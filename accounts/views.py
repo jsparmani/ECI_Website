@@ -120,14 +120,15 @@ def add_voter(request, username):
 
 def add_gov_user(request):
     if request.method == 'POST':
-        form = forms.AddUserForm(request.POST)
+        form = forms.AddGovUserForm(request.POST)
         if form.is_valid():
             username = form.cleaned_data['username']
+            email = form.cleaned_data['email']
             password = form.cleaned_data['password']
             try:
                 temp = User.objects.get(username=username)
             except:
-                user = User.objects.create_user(username, '', password)
+                user = User.objects.create_user(username, email , password)
                 user.save()
                 return redirect('accounts:add_gov_user_phone', username=username)
 
@@ -135,10 +136,10 @@ def add_gov_user(request):
             'username': ['username']
         }
         jsondata = json.dumps(data)
-        form = forms.AddUserForm()
+        form = forms.AddGovUserForm()
         return render(request, 'accounts/add_gov_user.html', {'form': form, 'jsondata': jsondata})
     else:
-        form = forms.AddUserForm()
+        form = forms.AddGovUserForm()
     return render(request, 'accounts/add_gov_user.html', {'form': form})
 
 

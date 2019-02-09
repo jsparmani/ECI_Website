@@ -30,6 +30,16 @@ class AddUserForm(forms.ModelForm):
 
         widgets = {'password': forms.PasswordInput}
 
+
+class AddGovUserForm(forms.ModelForm):
+
+    class Meta():
+        model = User
+        fields = ['username', 'email','password']
+
+        widgets = {'password': forms.PasswordInput}
+
+
 class AddVoterForm(forms.ModelForm):
 
     class Meta():

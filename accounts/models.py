@@ -4,13 +4,6 @@ from django.contrib import auth
 
 # Create your models here.
 
-""" class User(auth.Models.User, auth.Models.PermissionsMixin):
-
-    
-    
-    def __str__(self):
-        return self.username
- """
 
  
 
