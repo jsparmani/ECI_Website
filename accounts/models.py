@@ -28,10 +28,11 @@ class Voter(models.Model):
 
 
 class Constituency(models.Model):
+    id = models.PositiveIntegerField(primary_key=True)
     booth = models.PositiveIntegerField(default=0)
 
     def __str__(self):
-        return str(self.pk) 
+        return str(self.id) 
 
 
 class ComplaintType(models.Model):

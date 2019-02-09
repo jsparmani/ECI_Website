@@ -19,6 +19,9 @@
     <a href="{% url 'accounts:add_user' %}">Add User</a>
     {% if user.gov.is_supergov %}
     <a href="{% url 'accounts:add_gov_user' %}">Add Gov user</a>
+    <a href="{% url 'accounts:add_constituency' %}">Add Constituency</a>
+    <a href="{% url 'accounts:add_complaint_type' %}">Add Complaint Type</a>
+
     {% endif %}
     
 

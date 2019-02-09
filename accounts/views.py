@@ -164,3 +164,32 @@ def add_gov_user_phone(request, username):
         form = forms.AddGovPhoneForm()
         return render(request, 'accounts/add_gov_user_phone.html', {'form': form, 'username': username})
 
+def add_constituency(request):
+    if request.method == 'POST':
+        form = forms.ConstituencyForm(request.POST)
+        if form.is_valid():
+            const = form.save()
+            data = {'id':form.cleaned_data['id']+1}
+            form = forms.ConstituencyForm(initial = data)
+            return render(request, 'accounts/add_constituency.html',{'form':form})
+        else:
+            return redirect('fault', fault="Constituency with this ID already exists")
+            
+    else:
+        form = forms.ConstituencyForm()
+        return render(request, 'accounts/add_constituency.html',{'form':form}) 
+
+
+def add_complaint_type(request):
+    if request.method == 'POST':
+        form = forms.ComplaintTypeForm(request.POST)
+        if form.is_valid():
+            complaint_type = form.save()
+            form = forms.ComplaintTypeForm()
+            return render(request, 'accounts/add_complaint_type.html',{'form':form})
+        else:
+            return redirect('fault', fault="Complaint of this type already exists")
+            
+    else:
+        form = forms.ComplaintTypeForm()
+        return render(request, 'accounts/add_complaint_type.html',{'form':form})

@@ -14,4 +14,6 @@ urlpatterns = [
     path('add_voter/<str:username>/',views.add_voter,name='add_voter'),
     path('add_gov_user/',views.add_gov_user,name='add_gov_user'),
     path('add_gov_user_phone/<str:username>/',views.add_gov_user_phone,name='add_gov_user_phone'),
+    path('add_constituency/',views.add_constituency, name = 'add_constituency'),
+    path('add_complaint_type/',views.add_complaint_type, name = 'add_complaint_type'),
 ]
