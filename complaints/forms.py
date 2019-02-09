@@ -17,7 +17,7 @@ class get_number(forms.Form):
 
 class get_type_form(forms.Form):
 
-    COMPLAINT_CHOICES = []
+    COMPLAINT_CHOICES = [('All','All')]
     type_list = [u['type']
                  for u in acc_models.ComplaintType.objects.all().values('type')]
     for temp in type_list:

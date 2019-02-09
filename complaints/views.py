@@ -172,15 +172,21 @@ def display_type_stats(request, type):
     dict = {}
     const_list = []
     num_list = []
-
+    id_list = [u['id'] for u in acc_models.Constituency.objects.all().values('id')]
     type = type.replace("-", " ")
-
-    for i in range(1, acc_models.Constituency.objects.all().count()+1):
-        num = models.Complaint.objects.all().filter(
-            choice__iexact=type, user__voter_details__cons_no__iexact=i).count()
-        dict.update({i: num})
-        const_list.append(str(i))
-        num_list.append(num)
+    if type!='all':
+        for id in id_list:
+            num = models.Complaint.objects.all().filter(
+                choice__iexact=type, user__voter_details__cons_no__iexact=id).count()
+            dict.update({id: num})
+            const_list.append(str(id))
+            num_list.append(num)
+    else:
+        for id in id_list:
+            num = models.Complaint.objects.all().filter(user__voter_details__cons_no__iexact=id).count()
+            dict.update({id: num})
+            const_list.append(str(id))
+            num_list.append(num)
     data = {
         "label": const_list,
         "value": num_list
