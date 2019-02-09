@@ -12,12 +12,31 @@ from django.contrib.auth.decorators import login_required
 import json
 User = get_user_model()
 
+def CheckBadWords(list2):
+    list3=[]
+    for item2 in list2:
+        list3.append(f'{item2}\n'.lower())
+
+    list1=open("C:/Users/Aditya/Desktop/WebDev/Django/ECI_Website/ECI_Website/complaints/bad_words.txt",'r').readlines()
+    print(list1)
+    for item1 in list3:
+        for item2 in list1:
+            if(item1==item2):
+                return False
+    return True
+
+
+
 @login_required
 def CreateComplaint(request):
     if request.method == 'POST':
         form = forms.ComplaintForm(request.POST, request.FILES)
         if form.is_valid():
             try:
+                list2=str(form.cleaned_data['description']).split()
+                res=CheckBadWords(list2)
+                if not res:
+                    return redirect('fault', fault=f'YOU CANNOT USE THESE OFFENSIVE WORD IN THE DESCRIPTION')
                 complaint = form.save(commit=False)
                 complaint.user = request.user
                 complaint.save()
