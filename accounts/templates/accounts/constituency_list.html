@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+	
+	<ul>
+		{% for const in constituency_list %}
+			<li>
+				<p>Constituency ID: {{const.id}} &nbsp; &nbsp; No. of Booths: {{const.booth}}</p>
+				<p></p>
+			</li>
+		{% endfor %}
+	</ul>
+
+{% endblock %}

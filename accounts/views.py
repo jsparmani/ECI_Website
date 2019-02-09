@@ -205,6 +205,12 @@ def update_constituency(request):
         return render(request, 'accounts/constituency_update_form.html',{'form':form}) 
 
 
+class ConstituencyList(generic.ListView):
+    model = models.Constituency
+    template_name = "accounts/constituency_list.html"
+
+
+
 def add_complaint_type(request):
     if request.method == 'POST':
         form = forms.ComplaintTypeForm(request.POST)

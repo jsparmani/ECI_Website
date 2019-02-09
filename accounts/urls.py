@@ -17,4 +17,5 @@ urlpatterns = [
     path('add_constituency/',views.add_constituency, name = 'add_constituency'),
     path('add_complaint_type/',views.add_complaint_type, name = 'add_complaint_type'),
     path('update_constituency/',views.update_constituency, name = 'update_constituency'),
+    path('constituency_list/', views.ConstituencyList.as_view(), name = 'constituency_list'),
 ]
