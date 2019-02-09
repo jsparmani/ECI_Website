@@ -47,6 +47,13 @@ class OtpForm(forms.Form):
     otp = forms.IntegerField(widget=forms.PasswordInput)
 
 
+# class ConstituencyForm(forms.ModelForm):
+
+#     class Meta():
+#         model = models.Constituency
+#         fields = []
+
+
 
 
 
