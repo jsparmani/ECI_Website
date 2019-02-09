@@ -213,3 +213,4 @@ def add_complaint_type(request):
     else:
         form = forms.ComplaintTypeForm()
         return render(request, 'accounts/add_complaint_type.html',{'form':form})
+

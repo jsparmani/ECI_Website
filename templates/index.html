@@ -5,5 +5,9 @@
 
     <p>Likes: {{likes}}</p>
     <p>Dislikes: {{dislikes}}</p>
+    <p>Complaints registered: {{max_complaints}}</p>
+   	{% for id in max_id %}
+   	<p>Constituency ID: {{id}}</p>
+   	{% endfor %}
 
 {% endblock %}

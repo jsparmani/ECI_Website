@@ -11,7 +11,19 @@ class HomePage(TemplateView):
     def get(self, request):
     	likes = com_models.Complaint.objects.all().filter(is_liked__iexact=1).count()
     	dislikes = com_models.Complaint.objects.all().filter(is_disliked__iexact=1).count()
-    	return render(request, self.template_name, {'likes':likes, 'dislikes':dislikes})
+
+    	cons_list = [u['id'] for u in acc_models.Constituency.objects.all().values('id')]
+    	max_id = [-1]
+    	max_complaints = -1
+    	for cons in cons_list:
+    		complaints_num = com_models.Complaint.objects.all().filter(user__voter_details__cons_no__iexact=cons).count()
+    		if complaints_num>max_complaints:
+    			max_complaints=complaints_num
+    			max_id=[]
+    			max_id.append(cons)
+    		elif complaints_num == max_complaints:
+    			max_id.append(cons)
+    	return render(request, self.template_name, {'likes':likes, 'dislikes':dislikes, 'max_complaints':max_complaints, 'max_id':max_id})
 
 class WelcomePage(TemplateView):
     template_name = 'welcome.html'
@@ -22,3 +34,6 @@ class ThanksPage(TemplateView):
 
 def fault_page(request,fault):
     return render(request, 'fault.html', {'fault':fault})
+
+    
+
